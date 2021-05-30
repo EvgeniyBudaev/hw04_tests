@@ -22,7 +22,7 @@ class PostsURLTests(TestCase):
         cls.templates_url_names = {
             'posts/index.html': reverse('index'),
             'posts/group.html': reverse('group_posts',
-                                  kwargs={'slug': cls.group.slug}),
+                                        kwargs={'slug': cls.group.slug}),
             'posts/new_post.html': reverse('new_post'),
             'posts/profile.html': reverse(
                 'profile',
@@ -76,9 +76,9 @@ class PostsURLTests(TestCase):
         for template, reverse_name in self.templates_url_names.items():
             with self.subTest():
                 if reverse_name == reverse(
-                        'post_edit',
-                        kwargs={'username': self.author.username,
-                                'post_id': self.post.id}, ):
+                    'post_edit',
+                    kwargs={'username': self.author.username,
+                            'post_id': self.post.id}, ):
                     response = self.no_author_client.get(reverse_name)
                     self.assertEqual(response.status_code, 302)
                 else:
