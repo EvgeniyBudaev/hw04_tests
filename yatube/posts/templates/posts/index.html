@@ -1,0 +1,32 @@
+{% extends "include/base.html" %}
+{% load static %}
+
+{% block title %}Последние обновления на сайте{% endblock %}
+{% block css_files %}
+  <link rel="stylesheet" href="{% static 'css/posts.css' %}">
+{% endblock %}
+{% block header %}Последние обновления на сайте{% endblock %}
+{% block content %}
+
+  {% for post in page %}
+    <h3>
+      Автор: {{ post.author.get_full_name }}, Дата публикации:
+      {{ post.pub_date|date:"d M Y" }}
+    </h3>
+    <p>{{ post.text|linebreaksbr }}</p>
+
+    {% if user == post.author %}
+            <a class="btn btn-sm text-muted"
+               href="{% url 'post_edit' post.author.username post.id %}"
+               role="button">
+              Редактировать
+            </a>
+    {% endif %}
+
+    {% if not forloop.last %}
+      <hr>{% endif %}
+  {% endfor %}
+
+  {% include "include/paginator.html" %}
+
+{% endblock %}
