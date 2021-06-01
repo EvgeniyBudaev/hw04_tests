@@ -12,9 +12,9 @@ class Group(models.Model):
                                    verbose_name="Описание")
 
     class Meta:
-        ordering = ['title']
-        verbose_name = 'Группу'
-        verbose_name_plural = 'Группы'
+        ordering = ["title"]
+        verbose_name = "Группу"
+        verbose_name_plural = "Группы"
 
     def __str__(self):
         return self.title
@@ -32,9 +32,9 @@ class Post(models.Model):
                                related_name="posts")
 
     class Meta:
-        ordering = ['-pub_date']
-        verbose_name = 'Пост'
-        verbose_name_plural = 'Посты'
+        ordering = ["-pub_date"]
+        verbose_name = "Пост"
+        verbose_name_plural = "Посты"
 
     def __str__(self):
         return self.text[:15]
