@@ -55,6 +55,10 @@ python manage.py collectstatic
 pip install pytest
 pytest --version
 
+Изображения
+pip install Pillow
+pip install sorl-thumbnail
+
 
 GIT
 # Добавить папку в игнор-лист гита
