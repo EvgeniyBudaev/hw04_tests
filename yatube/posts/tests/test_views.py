@@ -92,6 +92,11 @@ class PostsPagesTests(TestCase):
             reverse('group_posts', kwargs={'slug': 'test-slug'}))
         self.assertTrue(self.post not in response.context['page'])
 
+    def test_page_not_found(self):
+        """Сервер возвращает код 404, если страница не найдена."""
+        response_page_not_found = self.guest_client.get('/tests_url/')
+        self.assertEqual(response_page_not_found.status_code, 404)
+
 
 class PaginatorViewsTest(TestCase):
     @classmethod
