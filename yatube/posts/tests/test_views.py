@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse
 from django import forms
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from posts.models import Post, Group
 
@@ -13,6 +14,19 @@ class PostsPagesTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        small_jpg = (
+            b'\x47\x49\x46\x38\x39\x61\x02\x00'
+            b'\x01\x00\x80\x00\x00\x00\x00\x00'
+            b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
+            b'\x00\x00\x00\x2C\x00\x00\x00\x00'
+            b'\x02\x00\x01\x00\x00\x02\x02\x0C'
+            b'\x0A\x00\x3B'
+        )
+        cls.uploaded = SimpleUploadedFile(
+            name='small.jpg',
+            content=small_jpg,
+            content_type='image/jpg'
+        )
         cls.user = User.objects.create(username='test_user')
         cls.group = Group.objects.create(
             title='Тестовая группа',
@@ -23,12 +37,14 @@ class PostsPagesTests(TestCase):
         cls.post = Post.objects.create(
             text='Тестовый текст',
             author=cls.user,
+            image=PostsPagesTests.uploaded,
         )
 
         cls.post2 = Post.objects.create(
             text='Тестовый текст',
             author=cls.user,
-            group=cls.group
+            group=cls.group,
+            image=PostsPagesTests.uploaded,
         )
 
     def setUp(self):
