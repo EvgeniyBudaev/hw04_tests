@@ -1,5 +1,6 @@
 {% extends "include/base.html" %}
 {% load static %}
+{% load cache %}
 
 {% block title %}Последние обновления на сайте{% endblock %}
 {% block css_files %}
@@ -7,6 +8,7 @@
 {% endblock %}
 {% block header %}Последние обновления на сайте{% endblock %}
 {% block content %}
+
 
   {% for post in page %}
     {% load thumbnail %}

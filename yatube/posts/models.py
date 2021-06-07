@@ -27,7 +27,8 @@ class Post(models.Model):
                               on_delete=models.SET_NULL)
     text = models.TextField(verbose_name="Текст поста")
     pub_date = models.DateTimeField(auto_now_add=True,
-                                    verbose_name="Дата публикации")
+                                    verbose_name="Дата публикации",
+                                    db_index=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE,
                                related_name="posts")
     image = models.ImageField(upload_to='posts/', blank=True, null=True,

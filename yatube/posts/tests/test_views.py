@@ -4,6 +4,7 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from django import forms
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.cache import cache
 
 from posts.models import Post, Group
 
@@ -112,6 +113,17 @@ class PostsPagesTests(TestCase):
         """Сервер возвращает код 404, если страница не найдена."""
         response_page_not_found = self.guest_client.get('/tests_url/')
         self.assertEqual(response_page_not_found.status_code, 404)
+
+    # def test_index_cached(self):
+    #     """ Стартовая страница не изменяется в течении 20с """
+    #     response_one = self.guest_client.get(reverse('index'))
+    #     response_two = self.guest_client.get(reverse('index'))
+    #     cache.clear()
+    #     response_three = self.guest_client.get(reverse('index'))
+    #     self.assertEqual(response_one .content, response_two.content,
+    #                      "Контексты отличаются - не работает кэш")
+    #     self.assertNotEqual(response_one .content, response_three.content,
+    #                         "после сброса контексты одинаковые")
 
 
 class PaginatorViewsTest(TestCase):
