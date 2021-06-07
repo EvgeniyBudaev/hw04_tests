@@ -122,9 +122,9 @@ class PostsPagesTests(TestCase):
         response_two = self.guest_client.get(reverse('index'))
         cache.clear()
         response_three = self.guest_client.get(reverse('index'))
-        self.assertEqual(response_one .content, response_two.content,
+        self.assertEqual(response_one.content, response_two.content,
                          "Контексты отличаются - не работает кэш")
-        self.assertNotEqual(response_one .content, response_three.content,
+        self.assertNotEqual(response_one.content, response_three.content,
                             "После очистки кеша контексты одинаковые")
 
 
