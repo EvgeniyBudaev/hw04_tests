@@ -78,6 +78,7 @@ class PostsPagesTests(TestCase):
     # Проверка словаря контекста главной страницы
     def test_home_page_show_correct_context(self):
         """Шаблон index сформирован с правильным контекстом."""
+        cache.clear()
         response = self.guest_client.get(reverse('index'))
         self.assertEqual(response.context.get('page').object_list[-1],
                          self.post)
@@ -114,16 +115,17 @@ class PostsPagesTests(TestCase):
         response_page_not_found = self.guest_client.get('/tests_url/')
         self.assertEqual(response_page_not_found.status_code, 404)
 
-    # def test_index_cached(self):
-    #     """ Стартовая страница не изменяется в течении 20с """
-    #     response_one = self.guest_client.get(reverse('index'))
-    #     response_two = self.guest_client.get(reverse('index'))
-    #     cache.clear()
-    #     response_three = self.guest_client.get(reverse('index'))
-    #     self.assertEqual(response_one .content, response_two.content,
-    #                      "Контексты отличаются - не работает кэш")
-    #     self.assertNotEqual(response_one .content, response_three.content,
-    #                         "после сброса контексты одинаковые")
+    def test_index_cached(self):
+        """Кеширование."""
+        """ Стартовая страница не изменяется в течении 20с """
+        response_one = self.guest_client.get(reverse('index'))
+        response_two = self.guest_client.get(reverse('index'))
+        cache.clear()
+        response_three = self.guest_client.get(reverse('index'))
+        self.assertEqual(response_one .content, response_two.content,
+                         "Контексты отличаются - не работает кэш")
+        self.assertNotEqual(response_one .content, response_three.content,
+                            "После очистки кеша контексты одинаковые")
 
 
 class PaginatorViewsTest(TestCase):
