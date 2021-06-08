@@ -6,7 +6,7 @@ import datetime as dt
 
 from yatube.settings import POSTS_IN_PAGINATOR
 from .models import Post, Group
-from .forms import PostForm
+from .forms import PostForm, CommentForm
 
 
 def index(request):
@@ -54,11 +54,17 @@ def profile(request, username):
 
 def post_view(request, username, post_id):
     post = get_object_or_404(Post, author__username=username, pk=post_id)
+    author = post.author
+    posts_count = author.posts.count()
+    form = CommentForm
+    comments = post.comments.select_related('author').all()
 
     context = {
         "post": post,
-        "author": post.author,
-        "posts_count": post.author.posts.count()
+        "author": author,
+        "posts_count": posts_count,
+        'form': form,
+        'comments': comments
     }
 
     return render(request, 'posts/post.html', context)
@@ -102,3 +108,30 @@ def post_edit(request, username, post_id):
 
     else:
         return redirect('post', username=username, post_id=post_id)
+
+
+def page_not_found(request, exception):
+    # Переменная exception содержит отладочную информацию,
+    # выводить её в шаблон пользователской страницы 404 мы не станем
+    return render(
+        request,
+        "misc/404.html",
+        {"path": request.path},
+        status=404
+    )
+
+
+def server_error(request):
+    return render(request, "misc/500.html", status=500)
+
+
+@login_required
+def add_comment(request, username, post_id):
+    post = get_object_or_404(Post, author__username=username, pk=post_id)
+    form = CommentForm(request.POST or None)
+    if form.is_valid():
+        new_comment = form.save(commit=False)
+        new_comment.author = request.user
+        new_comment.post = post
+        new_comment.save()
+    return redirect('post', username, post_id)
